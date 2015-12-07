@@ -8,6 +8,20 @@ require('./modules/routes')(app);
 
 var port = app.get('port');
 
+var Promise = require('bluebird');
+var request = require('request');
+
+Promise(function(resolve, reject) {
+	request('http://api.sr.se/api/v2/traffic/messages', function(err, res, html) {
+		if (err) { reject(err); }
+		else { resolve(html); }
+	});
+})
+// .then(function(result) {
+//     console.log(result);
+// })
+
+
 app.listen(port, function() {
 	console.log('Started on localhost: ' + port);
 });
