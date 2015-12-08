@@ -11,12 +11,14 @@ var port = app.get('port');
 var Promise = require('bluebird');
 var request = require('request');
 
-Promise(function(resolve, reject) {
-	request('http://api.sr.se/api/v2/traffic/messages', function(err, res, html) {
-		if (err) { reject(err); }
-		else { resolve(html); }
-	});
-})
+
+console.log("sdf")
+
+	// request('http://api.sr.se/api/v2/traffic/messages', function(err, res, html) {
+	// 	if (err) { console.log(err); }
+	// 	else { console.log(html); }
+	// });
+
 // .then(function(result) {
 //     console.log(result);
 // })
