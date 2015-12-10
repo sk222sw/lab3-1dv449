@@ -1,4 +1,8 @@
 // cloud 9 things
 .c9
 
+//node packages - install using npm install instead
 node_modules
+
+// api keys
+keys

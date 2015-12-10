@@ -1,6 +1,7 @@
 // create express app
 var express = require('express');
 var app = express();
+var fs = require('fs');
 
 // read configuration and routes
 require('./modules/config')(app);
@@ -11,17 +12,6 @@ var port = app.get('port');
 var Promise = require('bluebird');
 var request = require('request');
 
-
-console.log("sdf")
-
-	// request('http://api.sr.se/api/v2/traffic/messages', function(err, res, html) {
-	// 	if (err) { console.log(err); }
-	// 	else { console.log(html); }
-	// });
-
-// .then(function(result) {
-//     console.log(result);
-// })
 
 
 app.listen(port, function() {

@@ -4,31 +4,35 @@ var Promise = require('bluebird');
 var inspect = require('eyes').inspector({maxLength: false});
 var cheerio = require('cheerio');
 
-var mash = function (url) {
-    var xml = "";
-    var json = "";
-    var hej = new Promise(function (resolve, reject) {
-        return request(url, function(err, res, xml) {
-            if (err) { reject(err); }
-            else {
-                // console.log(xml);
-                resolve (xml);
-            }
-        });
-    })
-    .then(function parseThatXml(xml) {
-        return parseString(xml, function(err, result) {
-            json = JSON.stringify(result);
-            // inspect(result);
-            console.log(result);
-            // return json;
-        });
-    })
-    .then(function (j) {
-        // console.log(json);    
-    })
-    
 
+
+var Mash = function() {};
+
+
+Mash.prototype.get = function (url) {
+    var ret = "";
+	return new Promise(function (resolve, reject) {
+	    var hej = "";
+		request(url, function (err, res, str) {
+			if (err) { reject(err); }
+			else {
+				var stuff = str;
+				var parsed = JSON.parse(stuff);
+                // console.log(parsed.messages[0]);
+
+				
+				print = JSON.stringify(parsed.messages[0]);
+                ret = parsed;
+			}
+		})
+				// resolve(ret);
+				return ret;
+	});
 }
 
-exports.mash = mash;
+Mash.prototype.map = function() {
+	
+};
+
+
+module.exports = new Mash();
