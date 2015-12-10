@@ -1,7 +1,5 @@
 var request = require('request');
-var parseString = require('xml2js').parseString;
 var Promise = require('bluebird');
-var inspect = require('eyes').inspector({maxLength: false});
 var cheerio = require('cheerio');
 
 

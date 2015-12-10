@@ -6,6 +6,7 @@ var fs = require('fs');
 var print = "sdf";
 var lat = "latityde tom";
 var lon = "longitude tom";
+var accidentCollection;
 
 var foo = function (url) {
 	return new Promise(function (resolve, reject) {
@@ -16,7 +17,8 @@ var foo = function (url) {
 
 				var parsed = JSON.parse(stuff);
 				// console.log(parsed.messages[0].latitude);
-				
+				accidentCollection = parsed.messages;
+				console.log(accidentCollection[0]);
 				print = JSON.stringify(parsed.messages[0]);
 				lat = JSON.stringify(parsed.messages[0].latitude);
 				lon = JSON.stringify(parsed.messages[0].longitude);
@@ -46,7 +48,8 @@ module.exports = function(app) {
 			mash: print,
 			lat: lat,
 			lon: lon,
-			googleApiKey: JSON.parse(googleApiKey)
+			googleApiKey: JSON.parse(googleApiKey),
+			accidentCollection: accidentCollection
 		});
 	});
 

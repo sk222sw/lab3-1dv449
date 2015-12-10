@@ -1,1 +1,36 @@
 <h1>Mash</h1>
+
+<div id="map-container">
+	<div id="map"></div>
+</div>
+
+
+
+<script type="text/javascript">
+	var coordinates = {
+		lat: {{lat}},
+		lng: {{lon}}
+	}
+
+	var map;
+	function initMap() {
+	  map = new google.maps.Map(document.getElementById('map'), {
+	    center: coordinates,
+	    zoom: 5
+	  });
+
+	  var marker = new google.maps.Marker({
+  		map: map,
+  		animation: google.maps.Animation.DROP,
+  		position: coordinates
+	  });
+
+	}
+
+</script>
+
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEYt8wyj-woB5PQPYKUXci-KGPDlyjb_4&callback=initMap">
+</script>	
+
+{{accidentCollection.[0].title}}
