@@ -1,10 +1,33 @@
 <h1>Mash</h1>
 
+<div class="accidents-container">
+	{{#each accidentCollection}}
+
+		<div class="accident">
+			<div class="location">
+				Plats: {{title}}
+			</div>	
+			<div>
+				Exakt plats: {{exactlocation}}
+			</div>
+			<div>
+				Beskrivning: {{description}}
+			</div>
+			<div>
+				{{latitude}}
+			</div>
+			<div>
+				{{longitude}}
+			</div>
+		</div>
+		<br />
+	{{/each}}
+</div>	
+
+
 <div id="map-container">
 	<div id="map"></div>
 </div>
-
-
 
 <script type="text/javascript">
 	var coordinates = {
@@ -33,4 +56,5 @@
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEYt8wyj-woB5PQPYKUXci-KGPDlyjb_4&callback=initMap">
 </script>	
 
-{{accidentCollection.[0].title}}
+
+{{!-- {{accidentCollection.[0].title}} --}}

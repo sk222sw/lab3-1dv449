@@ -1,0 +1,34 @@
+<h1>test</h1>
+<div class="accidents-container">
+	{{#each accidentCollection}}
+
+		<div class="accident">
+			<div class="location">
+				Plats: {{title}}
+			</div>	
+			<div>
+				Exakt plats: {{exactlocation}}
+			</div>
+			<div>
+				Beskrivning: {{description}}
+			</div>
+			<div>
+				{{latitude}}
+			</div>
+			<div>
+				{{longitude}}
+			</div>
+		</div>
+		<br />
+	{{/each}}
+</div>
+
+<script>
+	$("document").ready(function () {
+		$(".accident").each(function () {
+			console.log($(this).children().each(function () {
+				return this;
+			}))
+		})
+	})
+</script>

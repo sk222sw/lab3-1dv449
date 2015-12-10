@@ -18,7 +18,6 @@ var foo = function (url) {
 				var parsed = JSON.parse(stuff);
 				// console.log(parsed.messages[0].latitude);
 				accidentCollection = parsed.messages;
-				console.log(accidentCollection[0]);
 				print = JSON.stringify(parsed.messages[0]);
 				lat = JSON.stringify(parsed.messages[0].latitude);
 				lon = JSON.stringify(parsed.messages[0].longitude);
@@ -48,16 +47,20 @@ module.exports = function(app) {
 			mash: print,
 			lat: lat,
 			lon: lon,
-			googleApiKey: JSON.parse(googleApiKey),
-			accidentCollection: accidentCollection
+			accidentCollection: accidentCollection,
+			googleApiKey: JSON.parse(googleApiKey)
 		});
 	});
 
-	app.get('/map', function(req, res) {
-	    res.render('home', {
-	    	map: mash.map(),
+	app.get('/test', function(req, res) {
+	    res.render('test', {
+	    	accidentCollection: accidentCollection
 	    })
 	})
+
+	app.get('/public/styles/css.css', function(req, res){
+	  res.sendFile(__dirname + '/public/styles/css.css');
+	});
 
 	app.use(function(req, res) {
 		res.type('text/plain');
