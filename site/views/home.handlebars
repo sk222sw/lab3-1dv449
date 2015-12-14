@@ -1,67 +1,31 @@
-<div id="map-container">
-	<div id="map"></div>
-</div>
-
-<div class="accidents-container">
-
-
-		<div class="accident">
-			<div class="location">
-				Plats: 
-			</div>	
-			<div>
-				Exakt plats:
+<main>
+	
+	<div id="map-container">
+		<div id="map"></div>
+	</div>
+	
+	<div class="accidents-container">
+		{{#each accidentCollection}}
+			<div class="accident">
+				<div class="location">
+					{{title}}
+				</div>	
+				<div class="exact-location">
+					{{exactlocation}}
+				</div>
+				<div class="description">
+					{{description}}
+				</div>
+				<div class="latitude">
+					{{latitude}}
+				</div>
+				<div class="longitude">
+					{{longitude}}
+				</div>
 			</div>
-			<div>
-				Beskrivning: 
-			</div>
-			<div>
-				lat
-			</div>
-			<div>
-				long
-			</div>
-		</div>
-		<div class="accident">
-			<div class="location">
-				Plats: 
-			</div>	
-			<div>
-				Exakt plats:
-			</div>
-			<div>
-				Beskrivning: 
-			</div>
-			<div>
-				lat
-			</div>
-			<div>
-				long
-			</div>
-		</div>
-
-{{!-- 
-	{{#each accidentCollection}}
-
-		<div class="accident">
-			<div class="location">
-				Plats: {{title}}
-			</div>	
-			<div>
-				Exakt plats: {{exactlocation}}
-			</div>
-			<div>
-				Beskrivning: {{description}}
-			</div>
-			<div>
-				{{latitude}}
-			</div>
-			<div>
-				{{longitude}}
-			</div>
-		</div>
-	{{/each}} --}}
-</div>	
+		{{/each}} 
+	</div>	
+</main>
 
 
 

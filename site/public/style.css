@@ -1,24 +1,51 @@
-html, body  {
-    margin: 0;
-    padding: 0;
+html, body {
     height: 100%;
     width: 100%;
+    padding: 0;
+    margin: 0;
 }
+
+
+main {
+    width: 96%;
+    height: 95%;
+    margin: 0 auto;
+}
+
 #map-container {
-    height: 80%;
-    width: 100%;                
+    height: 100%;
+    width: 79%;
+    display: inline-block;
 }
+
 #map {
     height: 100%;
     width: 100%;
 }
+
 .accidents-container {
-	width: 100%;
-	height: 20%;
+	width: 20%;
+	height: 100%;
+    display: inline-block;
+    overflow: auto;
 }
 
 .accident {
-	width: 20%;
-	border: solid black 1px;
-    display: inline-block;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.location {
+    font-size: 17px;
+}
+
+.exact-location {
+    
+}
+
+.latitude {
+    
+}
+
+.longitude {
+    
 }
