@@ -13,7 +13,7 @@ var foo = function (url) {
 				var messages = string.messages;
 
 				for (var i = 0; i <= messages.length - 1; i++) {
-					var date = parseInt(messages[i].createddate.substring(6, 19));
+					var date = parseInt(messages[i].createddate.substring(6, 19), 10);
 					var formatedDate = new Date(date);
 					messages[i].createddate = formatedDate;
 					console.log(formatedDate);
