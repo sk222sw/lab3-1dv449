@@ -1,9 +1,7 @@
-var request = require('request')
+var request = require('request');
 var Promise = require('bluebird');
 var fs = require('fs');
-var print = "sdf";
-var lat = "latityde tom";
-var lon = "longitude tom";
+
 var messageCollection;
 
 var foo = function (url) {
@@ -11,20 +9,22 @@ var foo = function (url) {
 		request(url, function (err, res, str) {
 			if (err) { reject(err); }
 			else {
-				var stuff = str;
+				var string = JSON.parse(str);
+				var messages = string.messages;
 
-				var parsed = JSON.parse(stuff);
-				console.log(parsed[0])
-				console.log(parsed.messages[0].id);
-				messageCollection = parsed.messages;
-				lat = JSON.stringify(parsed.messages[0].latitude);
-				lon = JSON.stringify(parsed.messages[0].longitude);
-
-				resolve(stuff);
+				for (var i = 0; i <= messages.length - 1; i++) {
+					var date = parseInt(messages[i].createddate.substring(6, 19));
+					var formatedDate = new Date(date);
+					messages[i].createddate = formatedDate;
+					console.log(formatedDate);
+				}
+				
+				messageCollection = messages;
+				resolve(str);
 			}
-		})
-	}) 
-}
+		});
+	}) ;
+};
 
 
 // var googleApiKey = fs.readFileSync("keys", "utf-8", function read(err, data) {
