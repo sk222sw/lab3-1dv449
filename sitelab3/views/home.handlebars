@@ -1,22 +1,29 @@
 <main>
 	
-	<div class="accidents-container">
-		{{#each accidentCollection}}
-			<div class="accident">
+	<div class="messages-container">
+		{{#each messageCollection}}
+			<div class="message" id="{{id}}">
 				<div class="location">
 					{{title}}
 				</div>	
 				<div class="exact-location">
-					{{exactlocation}}
+					{{#if exactlocation}}
+						{{exactlocation}} <hr />
+					{{/if}}
 				</div>
 				<div class="description">
-					{{description}}
+					{{#if description}}
+						{{description}}
+					{{/if}}
 				</div>
-				<div class="latitude">
+				<div class="coordinates latitude">
 					{{latitude}}
 				</div>
-				<div class="longitude">
+				<div class="coordinates longitude">
 					{{longitude}}
+				</div>
+				<div>
+					<input type="button" class="message-button {{id}}" value="visa">
 				</div>
 			</div>
 		{{/each}} 
