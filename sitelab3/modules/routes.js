@@ -44,7 +44,11 @@ var foo = function (url) {
 };
 
 var getTrafficMessages = function () {
-	
+	checkCachedTime()
+	.then(function (boo) {
+		console.log(boo);
+	})
+
 }
 
 var writeToCache = function (json) {
@@ -72,7 +76,6 @@ var checkCachedTime = function () {
 				return true;
 			}
 		});
-		
 	})
 };
 
