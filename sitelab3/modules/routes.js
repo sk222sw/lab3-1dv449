@@ -1,17 +1,20 @@
-var request = require('request');
-var Promise = require('bluebird');
-var fs = require('fs');
 var path = require('path');
+
 var srUrl = "http://api.sr.se/api/v2/traffic/messages?format=json&pagination=false&sort=createddate&indent=true";
 var trafficMessagesCache = path.join(__dirname, "/trafficmessages.json");
 var messageCollection;
 
 var TrafficMessage = require('./../models/TrafficMessage.js');
-TrafficMessage.get();
+// TrafficMessage.getMessages()
+// .then(function (data) {
+// 	console.log("in routes", data.requestDate);
+// })
+
 
 // console.err("CACHE FUNKAR INTE RIKTIGT ÄN! ÄNDRA
 //  SÅ DET SOM SPARAS TILL CACHE ÄR ETT JSON-OBJEKT EN NIVÅ HÖGRE SÅ DET ÄR TYP
 //   { REQUESTDATE: 23974, MESSAGES: { MESAGE1, MEESA2G}}");
+
 
 
 
@@ -102,9 +105,13 @@ TrafficMessage.get();
 
 module.exports = function(app) {
 	app.get('/:var(home|index)?', function(req, res) {
-		res.render('home', {
-			messageCollection: messageCollection
-		});
+		TrafficMessage.getMessages()
+		.then(function (result) {
+			console.log("result", result.requestDate);
+			res.render('home', {
+				messageCollection: result.messages
+			});
+		})
 	});
 
 	app.use(function(req, res) {
