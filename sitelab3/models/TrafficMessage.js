@@ -67,8 +67,4 @@ TrafficMessage.prototype.timeToMakeNewRequest = function (cachedData) {
 	return currentServerTime - cachedTime > maxTimeDifference;
 };
 
-TrafficMessage.prototype.write = function (data) {
-
-}
-
 module.exports = new TrafficMessage();
