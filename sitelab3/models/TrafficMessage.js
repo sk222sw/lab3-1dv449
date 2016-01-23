@@ -51,6 +51,15 @@ TrafficMessage.prototype.makeRequest = function (url) {
 			if (err) reject(err);
 			
 			var json = JSON.parse(str);
+			var messages = json.messages;
+			
+			// fix the ugly date format provided by the SR Api
+			for (var i = 0; i <= messages.length - 1; i++) {
+				var date = parseInt(messages[i].createddate.substring(6, 19), 10);
+				var formatedDate = new Date(date);
+				messages[i].createddate = formatedDate;
+			}
+
 			json.requestDate = new Date().getTime();
 			var stringData = JSON.stringify(json);
 			CacheHandler.write(trafficMessagesCache, stringData);

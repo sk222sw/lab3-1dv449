@@ -104,9 +104,18 @@ var mapApp = {
 				}
 			}
 		});
-	}
-};
+	},
 
+	expandClick: function () {
+		$(".expand").click(function () {
+			$(this).closest('.message').children().not(":first").not(":last").each(function () {
+				$(this).toggleClass("hidden");
+			})
+		})
+	}
+
+};
+mapApp.expandClick();
 mapApp.messageClick();
 mapApp.traverseMessages();
 mapApp.initMap();

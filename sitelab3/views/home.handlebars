@@ -6,27 +6,32 @@
 				<div class="location">
 					{{title}}
 				</div>	
-				<div class="exact-location">
+				<div class="button message-button">
+					<div class="center">Visa på karta</div>
+				</div>
+				<div class="exact-location hidden">
 					{{#if exactlocation}}
 						{{exactlocation}} <hr />
 					{{/if}}
 				</div>
-				<div>
+				<div class="created-date hidden">
 					{{createddate}}
 				</div>
-				<div class="description">
+				<div class="description hidden">
 					{{#if description}}
 						{{description}}
 					{{/if}}
 				</div>
-				<div class="coordinates latitude">
+				<div class="coordinates latitude hidden">
 					{{latitude}}
 				</div>
-				<div class="coordinates longitude">
+				<div class="coordinates longitude hidden">
 					{{longitude}}
 				</div>
-				<div>
-					<input type="button" class="message-button {{id}}" value="visa">
+				<div class="buttons">
+					<div class="expand down-arrow">
+						<div class="down-arrow">&#8645;</div>
+					</div>
 				</div>
 			</div>
 		{{/each}} 

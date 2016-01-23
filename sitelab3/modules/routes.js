@@ -14,7 +14,7 @@ module.exports = function(app) {
 			res.render('home', {
 				messageCollection: result.messages
 			});
-		})
+		});
 	});
 
 	app.use(function(req, res) {
