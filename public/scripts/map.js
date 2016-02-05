@@ -11,6 +11,15 @@ var mapApp = {
 		};
 	},
 
+	filterMessages: function() {
+		// var checked = [];
+		// $("#filterMessages").submit(function() {
+		// 	$(this).find("input:checkbox:checked").each(function(checkbox) {
+
+		// 	});
+		// });
+	},
+
 	traverseMessages: function () {
 		var location, exactlcation, description, latitude, longitude;
 
@@ -22,7 +31,6 @@ var mapApp = {
 			message.description = $(this).find(".description").html().trim();
 			message.latitude = parseFloat($(this).find(".latitude").html().trim());
 			message.longitude = parseFloat($(this).find(".longitude").html().trim());
-			var hej = message.location;
 			
 			mapApp.messages.push(message);
 		});
@@ -118,4 +126,5 @@ var mapApp = {
 mapApp.expandClick();
 mapApp.messageClick();
 mapApp.traverseMessages();
+mapApp.filterMessages();
 mapApp.initMap();

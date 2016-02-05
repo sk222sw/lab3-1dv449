@@ -17,6 +17,16 @@ module.exports = function(app) {
 		});
 	});
 
+	app.post("/filterMessages", function(req, res) {
+		// console.log("///////////////")
+		// console.log("filter solme shit plz")
+		// console.log(req.body)
+		// console.log("///////////////")
+
+		TrafficMessage.getMessages(req.body)
+
+	});
+
 	app.use(function(req, res) {
 		res.type('text/plain');
 		res.status(404);

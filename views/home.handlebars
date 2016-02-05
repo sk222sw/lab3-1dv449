@@ -1,11 +1,20 @@
 <main>
 	
 	<div class="messages-container">
+		<div id="filterCheckBoxes">
+			<form id="filterMessages" action="filterMessages" method="post">
+				<input type="checkbox" class="cbox" name="category0" id="showV-gtrafik" value="showV-gtrafik"> <label for="cbox2">Vägtrafik</label>
+				<input type="checkbox" class="cbox" name="category1" id="showKollektivtrafik" value="showKollektivtrafik"> <label for="cbox2">Kollektivtrafik</label>
+				<input type="checkbox" class="cbox" name="category2" id="showPlaneradSt-rning" value="showPlaneradSt-rning"> <label for="cbox2">Planerad störning</label>
+				<input type="checkbox" class="cbox" name="category3" id="show-vrigt" value="show-vrigt"> <label for="cbox2">Övrigt</label>
+				<button>Filtrera</button>
+			</form>
+		</div>
 		{{#each messageCollection}}
 			<div class="message" id="{{id}}">
 				<div class="location">
-					{{title}}
-				</div>	
+					{{title}} - {{categoryText}}
+				</div>
 				<div class="button message-button">
 					<div class="center">Visa på karta</div>
 				</div>

@@ -2,7 +2,7 @@ var request = require('request');
 var CacheHandler = require('./CacheHandler');
 var path = require('path');
 var trafficMessagesCache = path.join(__dirname, "/trafficmessages.json");
-var maxTimeDifference = 1000 * 60;
+var maxTimeDifference = 5000;
 
 var srUrl = "http://api.sr.se/api/v2/traffic/messages?format=json&pagination=false&sort=createddate&indent=true";
 
@@ -10,7 +10,7 @@ var TrafficMessage = function() {};
 
 TrafficMessage.prototype.messages = [];
 
-TrafficMessage.prototype.getMessages = function (path) {
+TrafficMessage.prototype.getMessages = function (checkBoxes) {
 	return new Promise(function (resolve, reject) {
 		CacheHandler.read(trafficMessagesCache)
 		.then(function (cachedData) {
@@ -38,9 +38,21 @@ TrafficMessage.prototype.getMessages = function (path) {
 				});
 			}
 		})
-		.then(function (requestData) {
-			console.log("requestDAta time", requestData.requestDate);
-			resolve(requestData);
+		.then(function filterMessages(requestData) {
+			var filters = [];
+			if (checkBoxes) {
+				if (checkBoxes.category0) filters.push(0);
+				if (checkBoxes.category1) filters.push(1);
+				if (checkBoxes.category2) filters.push(2);
+				if (checkBoxes.category3) filters.push(3);
+				console.log("filters äääär", filters)
+				console.log(typeof requestData)
+			}
+			return requestData;
+		})
+		.then(function (filteredMessages) {
+			console.log("requestDAta time", filteredMessages.requestDate);
+			resolve(filteredMessages);
 		});
 	});
 };
@@ -53,12 +65,19 @@ TrafficMessage.prototype.makeRequest = function (url) {
 			var json = JSON.parse(str);
 			var messages = json.messages;
 			
+			// category Id => category text
+			json.messages.forEach(function(message) {
+				message.categoryText = getCategoryTitle(message.category);
+			});
+
 			// fix the ugly date format provided by the SR Api
 			for (var i = 0; i <= messages.length - 1; i++) {
 				var date = parseInt(messages[i].createddate.substring(6, 19), 10);
 				var formatedDate = new Date(date);
 				messages[i].createddate = formatedDate;
 			}
+
+
 
 			json.requestDate = new Date().getTime();
 			var stringData = JSON.stringify(json);
@@ -68,6 +87,34 @@ TrafficMessage.prototype.makeRequest = function (url) {
 		});
 	});
 };
+
+function filterMessages() {
+
+};
+
+function getCategoryTitle(id) {
+	var categoryText;
+	switch(id) {
+		case 0:
+			categoryText = "Vägtrafik";
+			break;
+		case 1:
+			categoryText = "Kollektivtrafik";
+			break;
+		case 2:
+			categoryText = "Planerad störning";
+			break;
+		case 3:
+			categoryText = "Övrigt";
+			break;
+		default:
+			categoryText = "Okänd status";
+			break;
+	}
+	return categoryText;
+}
+
+
 
 TrafficMessage.prototype.timeToMakeNewRequest = function (cachedData) {
 	cachedData = JSON.parse(cachedData);
