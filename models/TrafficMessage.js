@@ -40,13 +40,20 @@ TrafficMessage.prototype.getMessages = function (checkBoxes) {
 		})
 		.then(function filterMessages(requestData) {
 			var filters = [];
+			var filteredMessages = [];
 			if (checkBoxes) {
 				if (checkBoxes.category0) filters.push(0);
 				if (checkBoxes.category1) filters.push(1);
 				if (checkBoxes.category2) filters.push(2);
 				if (checkBoxes.category3) filters.push(3);
-				console.log("filters äääär", filters)
-				console.log(typeof requestData)
+
+				var messages = requestData.messages;
+					messages.forEach(function(message) {
+					if (filters.indexOf(message.category) > -1) {
+						filteredMessages.push(message);
+					};
+				})
+				requestData.messages = filteredMessages;
 			}
 			return requestData;
 		})

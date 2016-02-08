@@ -17,14 +17,18 @@ module.exports = function(app) {
 		});
 	});
 
-	app.post("/filterMessages", function(req, res) {
+	app.post("/", function(req, res) {
 		// console.log("///////////////")
 		// console.log("filter solme shit plz")
 		// console.log(req.body)
 		// console.log("///////////////")
 
 		TrafficMessage.getMessages(req.body)
-
+		.then(function(result) {
+			res.render("home", {
+				messageCollection: result.messages
+			});
+		});
 	});
 
 	app.use(function(req, res) {
