@@ -11,13 +11,16 @@ var mapApp = {
 		};
 	},
 
-	filterMessages: function() {
-		// var checked = [];
-		// $("#filterMessages").submit(function() {
-		// 	$(this).find("input:checkbox:checked").each(function(checkbox) {
-
-		// 	});
-		// });
+	showFilterButtons: function() {
+		$(":checkbox").change(function() {
+			if ($("#filterMessages input:checkbox:checked").length > 0) {
+				if ($(".filterButton").hasClass("hidden")) {
+					$(".filterButton").toggleClass("hidden");
+				}
+			} else {
+				$(".filterButton").toggleClass("hidden");
+			}
+		})
 	},
 
 	traverseMessages: function () {
@@ -126,5 +129,5 @@ var mapApp = {
 mapApp.expandClick();
 mapApp.messageClick();
 mapApp.traverseMessages();
-mapApp.filterMessages();
+mapApp.showFilterButtons();
 mapApp.initMap();

@@ -41,6 +41,8 @@ TrafficMessage.prototype.getMessages = function (checkBoxes) {
 		.then(function filterMessages(requestData) {
 			var filters = [];
 			var filteredMessages = [];
+			console.log(checkBoxes);
+
 			if (checkBoxes) {
 				if (checkBoxes.category0) filters.push(0);
 				if (checkBoxes.category1) filters.push(1);

@@ -18,11 +18,6 @@ module.exports = function(app) {
 	});
 
 	app.post("/", function(req, res) {
-		// console.log("///////////////")
-		// console.log("filter solme shit plz")
-		// console.log(req.body)
-		// console.log("///////////////")
-
 		TrafficMessage.getMessages(req.body)
 		.then(function(result) {
 			res.render("home", {

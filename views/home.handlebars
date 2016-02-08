@@ -7,11 +7,9 @@
 				<input type="checkbox" class="cbox" name="category1" id="showKollektivtrafik" value="showKollektivtrafik"> <label for="cbox2">Kollektivtrafik</label>
 				<input type="checkbox" class="cbox" name="category2" id="showPlaneradSt-rning" value="showPlaneradSt-rning"> <label for="cbox2">Planerad störning</label>
 				<input type="checkbox" class="cbox" name="category3" id="show-vrigt" value="show-vrigt"> <label for="cbox2">Övrigt</label>
-				<button>Filtrera</button>
+				<button class="filterButton hidden">Filtrera</button>
 			</form>
-			<a href="/">
-				<button>Rensa</button>
-			</a>
+			<a href="/">Visa alla</a>
 		</div>
 		{{#each messageCollection}}
 			<div class="message" id="{{id}}">
