@@ -1,112 +1,65 @@
-var request = require('request');
-var Promise = require('bluebird');
-var fs = require('fs');
-var path = require('path');
-var srUrl = "http://api.sr.se/api/v2/traffic/messages?format=json&pagination=false&sort=createddate&indent=true";
-var trafficMessagesCache = path.join(__dirname, "/trafficmessages.json");
-var messageCollection;
 
-var checkCachedTime = function () {
-	return new Promise(function (resolve, reject) {
-		var result;
-		var cachedTime = 0;
-		var intData = 0;
-		fs.readFile(trafficMessagesCache, "utf-8", function (err, data) {
-			
-			if (err) { return console.error(err); }
-
-			else {
-				data = JSON.parse(data);
-				if (data === "") {
-					resolve(true);
-				} else {
-
-					if (data.requestDate != "undefined" && data.requestDate != null) {
-						cachedTime = 0;
-						cachedTime = data.requestDate;
-					} else {
-						console.log("lenght", data.length)
-						console.log("cahced", cachedTime);
-						console.log("shora")
-					}
-					intData = parseInt(cachedTime.toString(), 10);
-					console.log(intData);
-					var now = new Date().getTime();
-					var difference = 5000;
-
-					if (now - intData > difference) {
-						result = true;
-						resolve(result);
-					} else {
-						result = false;
-						resolve(result);
-					}
-				}
+			for (var i = 0; i <= messages.length - 1; i++) {
+				var aDate = new Date(parseInt(messages[i].createddate.substring(6, 19), 10))
+				aDate = aDate.toString();
+				dateArray = aDate.split(" ");
+				aDate = dateArray[3] + "." + dateArray[1] + "." + dateArray[2] + " " + dateArray[4];
+				aDate = Date.parse(aDate);
+				// console.log(aDate)
+				messages[i].createddate = aDate;
 			}
-		});
-	});
-};
 
-var getTrafficMessages = function () {
-	checkCachedTime()
-	.then(function (timeToCache) {
-		if (timeToCache) {
-			console.log("time to cache")
-			return new Promise(function (resolve, reject) {
-				request(srUrl, function (err, res, str) {
-					if (err) { reject(err); }
-					else {
-						var string = JSON.parse(str);
-						var messages = string.messages;
-						messages.requestDate = new Date().getTime();
-						console.log(messages.requestDate);
+			messages.sort(function(a,b) {
+				return a.createddate - b.createddate;
+			})
 
-						// fix the ugly date format provided by the SR Api
-						for (var i = 0; i <= messages.length - 1; i++) {
-							var date = parseInt(messages[i].createddate.substring(6, 19), 10);
-							var formatedDate = new Date(date);
-							messages[i].createddate = formatedDate;
-						}
+			for (var i = 0; i <= messages.length - 1; i++) {
+				var date = new Date(messages[i].createddate);
+				var time = timeConverter(date);
+				// console.log(time);
+			}
 
-						writeToCache(JSON.stringify(messages));
 
-						messageCollection = messages;
-						resolve(str);
-					}
-				});
-			});
-		} else {
-			console.log("tjuvgömman är stängd");
-
-		}
-	});
-};
-
-getTrafficMessages();
-
-var writeToCache = function (json) {
-	fs.writeFile(trafficMessagesCache, json, function (err) {
-		if (err) { throw err; }
-		console.log("wrote data to ", trafficMessagesCache);
-	});
-};
+				// var date = parseInt(messages[i].createddate.substring(6, 19), 10);
+				// var formatedDate = new Date(date);
+				// messages[i].createddate = formatedDate;
 
 
 
-
-// foo("http://api.sr.se/api/v2/traffic/messages?format=json&pagination=false&sort=createddate&indent=true");
-
-
-module.exports = function(app) {
-	app.get('/:var(home|index)?', function(req, res) {
-		res.render('home', {
-			messageCollection: messageCollection
-		});
-	});
-
-	app.use(function(req, res) {
-		res.type('text/plain');
-		res.status(404);
-		res.send('404 - not found');
-	});
-};
+				##NOT WORKING
+					console.log(date)
+	var d = date.toString().split(" ");
+	var day = d[2];
+	var month = d[1];
+	switch(month) {
+		case "Jan":
+			month = 1;
+		case "Feb":
+			month = 2;
+		case "Mar":
+			month = 3;
+		case "Apr":
+			month = 4;
+		case "Maj":
+			month = 5;
+		case "Jun":
+			month = 6;
+		case "Jul":
+			month = 7;
+		case "Aug":
+			month = 8;
+		case "Sep":
+			month = 9;
+		case "Okt":
+			month = 10;
+		case "Nov":
+			month = 11;
+		case "Dec":
+			month = 12;
+	}
+	var year = d[3];
+	var time = d[4];
+	var timeString = year + "-" + month + "-" + day + "T" + time;
+	console.log(timeString);
+	var hej = moment(timeString).unix();
+	console.log(hej)

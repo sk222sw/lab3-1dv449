@@ -10,7 +10,6 @@ module.exports = function(app) {
 	app.get('/:var(home|index)?', function(req, res) {
 		TrafficMessage.getMessages()
 		.then(function (result) {
-			console.log("result", result.requestDate);
 			res.render('home', {
 				messageCollection: result.messages
 			});

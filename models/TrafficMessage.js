@@ -1,47 +1,46 @@
 var request = require('request');
 var CacheHandler = require('./CacheHandler');
 var path = require('path');
+var moment = require('moment');
 var trafficMessagesCache = path.join(__dirname, "/trafficmessages.json");
 var maxTimeDifference = 5000;
 
-var srUrl = "http://api.sr.se/api/v2/traffic/messages?format=json&pagination=false&sort=createddate&indent=true";
+var srUrl = "http://api.sr.se/api/v2/traffic/messages?format=json&pagination=false";
 
 var TrafficMessage = function() {};
 
 TrafficMessage.prototype.messages = [];
 
+	// return new Promise(function (resolve, reject) {
+	// 	CacheHandler.read(trafficMessagesCache)
+	// 	.then(function (cachedData) {
+	// 		if (TrafficMessage.prototype.timeToMakeNewRequest(cachedData)) {
+	// 			return new Promise(function (resolve, reject) {
+	// 				TrafficMessage.prototype.makeRequest()
+	// 				.then(function (requestData) {
+	// 					resolve(requestData);
+	// 				});
+	// 			})
+	// 			.then(function (requestData) {
+	// 				return requestData;
+	// 			});
+	// 		} else {
+	// 			return new Promise(function (resolve, reject) {
+	// 				resolve(CacheHandler.read(trafficMessagesCache));
+	// 			})
+	// 			.then(function (cachedData) {
+	// 				cachedData = JSON.parse(cachedData);
+	// 				return cachedData;
+	// 			});
+	// 		}
+	// 	})
+
 TrafficMessage.prototype.getMessages = function (checkBoxes) {
 	return new Promise(function (resolve, reject) {
-		CacheHandler.read(trafficMessagesCache)
-		.then(function (cachedData) {
-			if (TrafficMessage.prototype.timeToMakeNewRequest(cachedData)) {
-				console.log("time to make new request");
-				return new Promise(function (resolve, reject) {
-					TrafficMessage.prototype.makeRequest()
-					.then(function (requestData) {
-						resolve(requestData);
-					});
-				})
-				.then(function (requestData) {
-					console.log("returning requested data");
-					return requestData;
-				});
-			} else {
-				console.log("time to read from cache");
-				return new Promise(function (resolve, reject) {
-					resolve(CacheHandler.read(trafficMessagesCache));
-				})
-				.then(function (cachedData) {
-					console.log("returning cached data");
-					cachedData = JSON.parse(cachedData);
-					return cachedData;
-				});
-			}
-		})
+		TrafficMessage.prototype.makeRequest()
 		.then(function filterMessages(requestData) {
 			var filters = [];
 			var filteredMessages = [];
-			console.log(checkBoxes);
 
 			if (checkBoxes) {
 				if (checkBoxes.category0) filters.push(0);
@@ -60,10 +59,66 @@ TrafficMessage.prototype.getMessages = function (checkBoxes) {
 			return requestData;
 		})
 		.then(function (filteredMessages) {
-			console.log("requestDAta time", filteredMessages.requestDate);
 			resolve(filteredMessages);
 		});
 	});
+};
+
+function getTimeFormatted(date) {
+	// console.log(date)
+	var time = date.substring(6, 19)
+	var timeZone = date.substring(19, 24);
+	var timeUnix = time + " " + timeZone;
+	// console.log(timeUnix)
+	// console.log(time)
+	var mom = moment.unix(time);
+	// console.log(mom)
+
+	var timeString = moment(mom).format("D MMMM HH:mm");
+	var t = timeString.split(" ");
+	t[1] = translateMonthName(t[1]);
+	var timeString = t[0] + " " + t[1] + " " + t[2];
+	return timeString;
+};
+
+function translateMonthName(month) {
+	switch(month.toLowerCase()) {
+		case "january":
+			return "januari";
+		case "februari":
+			return "februari";
+		case "march":
+			return "mars";
+		case "april":
+			return "april";
+		case "may":
+			return "maj";
+		case "june":
+			return "juni";
+		case "july":
+			return "juli";
+		case "august":
+			return "augusti";
+		case "september":
+			return "september";
+		case "october":
+			return "oktober";
+		case "november":
+			return "november";
+		case "december":
+			return "december";
+		default: 
+			return month;
+	}
+};
+
+function getUnixTimeStamp(date) {
+	return date.substring(6, 19);
+}
+
+function getDate2(date) {
+	var milliseconds = parseInt(date.substring(6, 19),10)
+	return new Date(milliseconds);
 };
 
 TrafficMessage.prototype.makeRequest = function (url) {
@@ -75,30 +130,41 @@ TrafficMessage.prototype.makeRequest = function (url) {
 			var messages = json.messages;
 			
 			// category Id => category text
+
+			messages.forEach(function(message) {
+				message.createddate = getDate2(message.createddate);
+			})
+
+			// // sort messages by date/time
+			messages.sort(function(a,b) {
+				return a.createddate - b.createddate;
+			});
+
+			messages.reverse();
 			json.messages.forEach(function(message) {
 				message.categoryText = getCategoryTitle(message.category);
 			});
 
-			// fix the ugly date format provided by the SR Api
-			for (var i = 0; i <= messages.length - 1; i++) {
-				var date = parseInt(messages[i].createddate.substring(6, 19), 10);
-				var formatedDate = new Date(date);
-				messages[i].createddate = formatedDate;
-			}
+			// json.messages = messages;
+			// for (var i = 0; i < messages.length; i++) {
+			// 	console.log(getTimeFormatted(messages[i].createddate));
+			// }
+			
+			// // fix the ugly date format provided by the SR Api
+			// // new Date(parseInt(messages[0].createddate.substring(6, 19), 10))
+			// for (var i = 0; i < messages.length; i++) {
+			// 	messages[i].createddate = getTimeFormatted(messages[i].createddate);
+			// 	// console.log(getTimeFormatted(messages[i].createddate));
+			// }
 
 
-
-			json.requestDate = new Date().getTime();
-			var stringData = JSON.stringify(json);
-			CacheHandler.write(trafficMessagesCache, stringData);
+			// json.requestDate = new Date().getTime();
+			// var stringData = JSON.stringify(json);
+			// CacheHandler.write(trafficMessagesCache, stringData);
 
 			resolve(json);
 		});
 	});
-};
-
-function filterMessages() {
-
 };
 
 function getCategoryTitle(id) {
