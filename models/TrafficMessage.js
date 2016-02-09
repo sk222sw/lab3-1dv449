@@ -3,7 +3,7 @@ var CacheHandler = require('./CacheHandler');
 var path = require('path');
 var moment = require('moment');
 var trafficMessagesCache = path.join(__dirname, "/trafficmessages.json");
-var maxTimeDifference = 5000;
+var maxTimeDifference = 60000; // 1 minute
 
 var srUrl = "http://api.sr.se/api/v2/traffic/messages?format=json&pagination=false";
 
@@ -11,35 +11,29 @@ var TrafficMessage = function() {};
 
 TrafficMessage.prototype.messages = [];
 
-	// return new Promise(function (resolve, reject) {
-	// 	CacheHandler.read(trafficMessagesCache)
-	// 	.then(function (cachedData) {
-	// 		if (TrafficMessage.prototype.timeToMakeNewRequest(cachedData)) {
-	// 			return new Promise(function (resolve, reject) {
-	// 				TrafficMessage.prototype.makeRequest()
-	// 				.then(function (requestData) {
-	// 					resolve(requestData);
-	// 				});
-	// 			})
-	// 			.then(function (requestData) {
-	// 				return requestData;
-	// 			});
-	// 		} else {
-	// 			return new Promise(function (resolve, reject) {
-	// 				resolve(CacheHandler.read(trafficMessagesCache));
-	// 			})
-	// 			.then(function (cachedData) {
-	// 				cachedData = JSON.parse(cachedData);
-	// 				return cachedData;
-	// 			});
-	// 		}
-	// 	})
 
 TrafficMessage.prototype.getMessages = function (checkBoxes) {
 	return new Promise(function (resolve, reject) {
+		CacheHandler.read(trafficMessagesCache)
+		.then(function(cachedData) {
+			if (TrafficMessage.prototype.timeToMakeNewRequest(cachedData)) {
+				console.log("Time to make new request");
+				return new Promise(function(resolve, reject) {
+					TrafficMessage.prototype.makeRequest()
+					.then(function(requestData) {
+						resolve(requestData);
+					});
+				})
+			} else {
+				console.log("Read from cache");
+				return new Promise(function(resolve, reject) {
+					resolve(CacheHandler.read(trafficMessagesCache));
+				});
+
+			}
+		})
 		TrafficMessage.prototype.makeRequest()
 		.then(function filterMessages(requestData) {
-			console.log(requestData.reqestDate);
 			var filters = [];
 			var filteredMessages = [];
 
@@ -71,7 +65,7 @@ function translateMonthName(month) {
 	switch(month.toLowerCase()) {
 		case "january":
 			return "januari";
-		case "februari":
+		case "february":
 			return "februari";
 		case "march":
 			return "mars";
@@ -94,7 +88,7 @@ function translateMonthName(month) {
 		case "december":
 			return "december";
 		default: 
-			return month;
+			return "nåt gick fel";
 	}
 };
 
@@ -121,14 +115,23 @@ TrafficMessage.prototype.makeRequest = function (url) {
 			});
 			messages.reverse();
 
+			// create nicer looking date string
+			messages.forEach(function(m) {
+				var date = moment(m.createddate).format("D MMMM HH:mm");
+				var t = date.split(" ");
+				t[1] = translateMonthName(t[1]);
+				var timeString = t[0] + " " + t[1] + " " + t[2];
+				m.createddate = timeString;
+			})
+
 			// category Id => category text
 			json.messages.forEach(function(message) {
 				message.categoryText = getCategoryTitle(message.category);
 			});
 
 			json.requestDate = new Date().getTime();
-			// var stringData = JSON.stringify(json);
-			// CacheHandler.write(trafficMessagesCache, stringData);
+			var stringData = JSON.stringify(json);
+			CacheHandler.write(trafficMessagesCache, stringData);
 
 			resolve(json);
 		});

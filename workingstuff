@@ -99,3 +99,29 @@ function getTimeFormatted(date) {
 	var timeString = t[0] + " " + t[1] + " " + t[2];
 	return timeString;
 };
+
+
+
+	// return new Promise(function (resolve, reject) {
+	// 	CacheHandler.read(trafficMessagesCache)
+	// 	.then(function (cachedData) {
+	// 		if (TrafficMessage.prototype.timeToMakeNewRequest(cachedData)) {
+	// 			return new Promise(function (resolve, reject) {
+	// 				TrafficMessage.prototype.makeRequest()
+	// 				.then(function (requestData) {
+	// 					resolve(requestData);
+	// 				});
+	// 			})
+	// 			.then(function (requestData) {
+	// 				return requestData;
+	// 			});
+	// 		} else {
+	// 			return new Promise(function (resolve, reject) {
+	// 				resolve(CacheHandler.read(trafficMessagesCache));
+	// 			})
+	// 			.then(function (cachedData) {
+	// 				cachedData = JSON.parse(cachedData);
+	// 				return cachedData;
+	// 			});
+	// 		}
+	// 	})

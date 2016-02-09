@@ -60,16 +60,18 @@ var mapApp = {
 	},
 
 	showInfoWindow: function (message, marker) {
-			if (mapApp.infoWindow === null) {
-				mapApp.infoWindow = new google.maps.InfoWindow({
-					content: mapApp.getInfoWindowContentString(message)
-				});
-				mapApp.infoWindow.open(map, marker);
-			} else {
-				mapApp.infoWindow.close();
-				mapApp.infoWindow.setContent(mapApp.getInfoWindowContentString(message));
-				mapApp.infoWindow.open(map, marker);
-			}		
+		var infoWindow = mapApp.getInfoWindowContentString(message);
+
+		if (mapApp.infoWindow === null) {
+			mapApp.infoWindow = new google.maps.InfoWindow({
+				content: infoWindow
+			});
+			mapApp.infoWindow.open(map, marker);
+		} else {
+			mapApp.infoWindow.close();
+			mapApp.infoWindow.setContent(infoWindow);
+			mapApp.infoWindow.open(map, marker);
+		}		
 	},
 
 	getInfoWindowContentString: function (message) {
@@ -78,12 +80,11 @@ var mapApp = {
 		var description = message.description;
 		var lat = message.latitude;
 		var lng = message.longitude;
-
 		var contentString = "<div class='infoWindow'>" +
-							"<div class='location'>" + location + "</div>" +
-							"<div class='exactLocation'>" + exactLocation + "</div>" +
-							"<div class='description'>" + description + "</div>" +
-							"<div class='coordinates'>Lat: " + lat + ", Lon: " + lng + "</div>" +
+							"<div class='infoWindow location'>" + location + "</div>" +
+							"<div class='infoWindow exactLocation'>" + exactLocation + "</div><br />" +
+							"<div class='infoWindow description'>" + description + "</div><br />" +
+							"<div class='infoWindow coordinates'>Lat: " + lat + "<br />Lon: " + lng + "</div>" +
 							"</div>";
 		return contentString;
 	},

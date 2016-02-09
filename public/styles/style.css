@@ -160,3 +160,12 @@ hr {
 .hidden {
     display: none;
 }
+
+.infoWindow {
+    overflow: hidden;
+    text-align: center;
+}
+
+.infoWindow .exactLocation {
+    color: red;
+}
