@@ -169,3 +169,7 @@ hr {
 .infoWindow .exactLocation {
     color: red;
 }
+
+#filterMessages {
+    font-size: 0.7em;
+}
