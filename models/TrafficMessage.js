@@ -39,6 +39,7 @@ TrafficMessage.prototype.getMessages = function (checkBoxes) {
 	return new Promise(function (resolve, reject) {
 		TrafficMessage.prototype.makeRequest()
 		.then(function filterMessages(requestData) {
+			console.log(requestData.reqestDate);
 			var filters = [];
 			var filteredMessages = [];
 
@@ -64,22 +65,7 @@ TrafficMessage.prototype.getMessages = function (checkBoxes) {
 	});
 };
 
-function getTimeFormatted(date) {
-	// console.log(date)
-	var time = date.substring(6, 19)
-	var timeZone = date.substring(19, 24);
-	var timeUnix = time + " " + timeZone;
-	// console.log(timeUnix)
-	// console.log(time)
-	var mom = moment.unix(time);
-	// console.log(mom)
 
-	var timeString = moment(mom).format("D MMMM HH:mm");
-	var t = timeString.split(" ");
-	t[1] = translateMonthName(t[1]);
-	var timeString = t[0] + " " + t[1] + " " + t[2];
-	return timeString;
-};
 
 function translateMonthName(month) {
 	switch(month.toLowerCase()) {
@@ -112,11 +98,7 @@ function translateMonthName(month) {
 	}
 };
 
-function getUnixTimeStamp(date) {
-	return date.substring(6, 19);
-}
-
-function getDate2(date) {
+function formatDate(date) {
 	var milliseconds = parseInt(date.substring(6, 19),10)
 	return new Date(milliseconds);
 };
@@ -129,36 +111,22 @@ TrafficMessage.prototype.makeRequest = function (url) {
 			var json = JSON.parse(str);
 			var messages = json.messages;
 			
-			// category Id => category text
-
 			messages.forEach(function(message) {
-				message.createddate = getDate2(message.createddate);
+				message.createddate = formatDate(message.createddate);
 			})
 
 			// // sort messages by date/time
 			messages.sort(function(a,b) {
 				return a.createddate - b.createddate;
 			});
-
 			messages.reverse();
+
+			// category Id => category text
 			json.messages.forEach(function(message) {
 				message.categoryText = getCategoryTitle(message.category);
 			});
 
-			// json.messages = messages;
-			// for (var i = 0; i < messages.length; i++) {
-			// 	console.log(getTimeFormatted(messages[i].createddate));
-			// }
-			
-			// // fix the ugly date format provided by the SR Api
-			// // new Date(parseInt(messages[0].createddate.substring(6, 19), 10))
-			// for (var i = 0; i < messages.length; i++) {
-			// 	messages[i].createddate = getTimeFormatted(messages[i].createddate);
-			// 	// console.log(getTimeFormatted(messages[i].createddate));
-			// }
-
-
-			// json.requestDate = new Date().getTime();
+			json.requestDate = new Date().getTime();
 			// var stringData = JSON.stringify(json);
 			// CacheHandler.write(trafficMessagesCache, stringData);
 

@@ -63,3 +63,39 @@
 	console.log(timeString);
 	var hej = moment(timeString).unix();
 	console.log(hej)
+
+				// json.messages = messages;
+			// for (var i = 0; i < messages.length; i++) {
+			// 	console.log(getTimeFormatted(messages[i].createddate));
+			// }
+			
+			// // fix the ugly date format provided by the SR Api
+			// // new Date(parseInt(messages[0].createddate.substring(6, 19), 10))
+			// for (var i = 0; i < messages.length; i++) {
+			// 	messages[i].createddate = getTimeFormatted(messages[i].createddate);
+			// 	// console.log(getTimeFormatted(messages[i].createddate));
+			// }
+
+
+			// json.requestDate = new Date().getTime();
+			// var stringData = JSON.stringify(json);
+			// CacheHandler.write(trafficMessagesCache, stringData);
+
+
+
+function getTimeFormatted(date) {
+	// console.log(date)
+	var time = date.substring(6, 19)
+	var timeZone = date.substring(19, 24);
+	var timeUnix = time + " " + timeZone;
+	// console.log(timeUnix)
+	// console.log(time)
+	var mom = moment.unix(time);
+	// console.log(mom)
+
+	var timeString = moment(mom).format("D MMMM HH:mm");
+	var t = timeString.split(" ");
+	t[1] = translateMonthName(t[1]);
+	var timeString = t[0] + " " + t[1] + " " + t[2];
+	return timeString;
+};
