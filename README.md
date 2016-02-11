@@ -20,3 +20,22 @@ Såvida det inte finns några säkerhetsbrister i API:erna så ser jag inga säk
 **Hur har du tänkt kring optimeringen i din applikation?**
 
 Jag länkar in CSS i *head* och skript sist i *body*. Det är en liten enkel applikation och jag har därför inte lagt tid på några större optimeringar, men för lite bättre optimering skulle jag kunna minifiera skript och css.
+
+
+## Komplettering 
+
+**HTTP/2**
+
+HTTP var från början väldigt simpelt, vilket hjälpte det att växa och användas i större utsträckning. Under tiden som det blev större och användes mer så utvecklades det nyare versioner, från HTTP 0.9 till HTTP 1.1. Med åren har webben och webbapplikationer utvecklats väldigt snabbt, och dagens appar har sprungit ifrån HTTP 1.1, vilket skapat begränsningar. Tanken med HTTP/2 är att få HTTP-protokollet att hinna ifatt utvecklingen. Övergången från 1.1 till 2 ska gå så transparent som möjligt så att inga 1.1-system kraschar.
+
+Huvudfokus ligger på prestanda. Data skickas inte längre via ASCII-protokoll utan med binära protokoll. Detta ger bättre prestanda och och minimerar antalet fel som kan ske med ASCII, men förutsätter också att server och webbläsare är rustade för det.
+
+Andra stora förändringar är att man med “multiplexing” kan skicka flera förfrågningar samtidigt på en och samma anslutning, headers komprimeras och med “server push” kan servern skicka data till klienten utan att en request görs.
+
+**Service workers**
+
+Service workers är ett nytt api som är under utveckling med fullt stöd endast i Chrome och Firefox. Det fungerar som en proxy mellan webbappar och webbläsare. Genom att cacha data kan man på ett smidigt sätt använda olika filer beroende på olika situationer. 
+
+I dagsläget används det främst för att implementera offline-lösningar; tappar användaren uppkoppling så laddas cachad data in och möjliggör att man kan fortsätta använda appen i offline-läge tills man blir uppkopplad igen. Med hjälp av olika lösningar för lagring på användarens dator eller i webbläsaren kan man ha en databas för offline-läge hos klienten, som automatiskt synkar med en “vanlig” databas på en server när möjlighet ges.
+
+Service workers är ett steg i utecklingen mot att webbappar ska fungera mer som program eller appar som man installerar på en dator.
